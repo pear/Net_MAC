@@ -107,7 +107,7 @@ class Net_MAC
 	 *
 	 * @access public
 	 *
-	 * @param object $db A valid instantiated {@link
+	 * @param object &$db A valid instantiated {@link
 	 * http://pear.php.net/package/MDB2/ MDB2} object to use when
 	 * adding/retrieving information from the database for MAC address
 	 * vendors
