@@ -409,7 +409,7 @@ class Net_MAC
 											 $where);
 
 			$query = $this->_db->prepare($sql);
-			$result = $query->execute($values);
+			$result = $query->execute();
 
 			if ( (MDB2::isError($result)) || ($result->numRows() == 0) ) {
 				return false;
