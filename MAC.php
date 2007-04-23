@@ -150,7 +150,7 @@ class Net_MAC
 		$this->_macaddr = NULL;
 		$this->_dbOptions = NULL;
     
-		if (!is_a($db, 'MDB2_Driver_Common')) {
+		if (!$db instanceof MDB2_Driver_Common) {
 			throw new Net_MAC_Exception('Bad database object', NET_MAC_ERROR_BADDB);
 		}
 
