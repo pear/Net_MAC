@@ -15,9 +15,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>atex@php.net</email>
   <active>yes</active>
  </lead>
- <date>2007-05-01</date>
+ <date>2008-03-04</date>
  <version>
-  <release>0.1.4</release>
+  <release>0.1.5</release>
   <api>0.1.0</api>
  </version>
  <stability>
@@ -25,9 +25,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <api>alpha</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License</license>
- <notes>* Updated the license to BSD (per Justin Patrin)
-* Updated requires to require PHP 5.0 instead of 4.2 (per Mark Wiesemann)
-* Updated some PEAR CS
+ <notes>* Updates to PEAR CS (thanks to Gordon Stratton)
+* Updates to code readability (thanks to Gordon Stratton)
  </notes>
  <contents>
   <dir name="/">
@@ -48,6 +47,21 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>0.1.5</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2008-03-04</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License</license>
+   <notes>* Updates to PEAR CS (thanks to Gordon Stratton)
+* Updates to code readability (thanks to Gordon Stratton)
+   </notes>
+  </release>
   <release>
    <version>
     <release>0.1.4</release>

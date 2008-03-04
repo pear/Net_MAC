@@ -143,13 +143,14 @@ class Net_MAC
      * an error during construction so the constructor should be
      * called from a try/catch block
      */
-    function __construct(&$db, $options = NULL) {
+    function __construct(&$db, $options = NULL)
+    {
         require_once 'MDB2.php';
 
         $this->_db = NULL;
         $this->_macaddr = NULL;
         $this->_dbOptions = NULL;
-    
+
         if (!$db instanceof MDB2_Driver_Common) {
             throw new Net_MAC_Exception('Bad database object', NET_MAC_ERROR_BADDB);
         }
@@ -197,8 +198,8 @@ class Net_MAC
     static function check($input, $delimiter = ':')
     {
         // Check for 6 octets without any punctuation
-        $retval = preg_match('/^([0-9a-fA-F][0-9a-fA-F]\Q'.$delimiter.'\E){5}([0-9a-fA-F][0-9a-fA-F]){1}$/', $input);
-                    
+        $retval = preg_match('/^([[:xdigit:]]{2}'.$delimiter.'){5}[[:xdigit:]]{2}$/', $input);
+
         return $retval;
     } /* end method check */
 
@@ -255,24 +256,28 @@ class Net_MAC
          * nothing.  We are going to be testing for a MAC address as
          * XXXXXXXXXXXX instead of XX:XX:XX:XX:XX:XX
          */
-        $macaddr = preg_replace('/[g-zG-Z]*\W*_*/', '', $input);
-        
+        $macaddr = preg_replace('/[^[:xdigit:]]/', '', $input);
+
         /* If $uppercase is true, set all the alpha characters to
          * uppercase, otherwise set all the alpha characters to
-         * lowercase 
+         * lowercase
          */
         $macaddr = ($uppercase) ? strtoupper($macaddr) : strtolower($macaddr);
 
-        // Check for 6 octets without any punctuation
-        if (!preg_match('/^([0-9a-fA-F][0-9a-fA-F]){6}$/', $macaddr)) {
+        /*
+         * Our character replacement guarantees we have no non-hex digits, so
+         * the last thing we have to do is verify the appropriate length for
+         * six hex octets.
+         */
+        if (strlen($macaddr) !== 12) {
             return false;
         }
-            
-        // Add back in the $delimiter delimiters
-        $macaddr = preg_replace('/([0-9a-fA-F][0-9a-fA-F]){1}/', '$1' . $delimiter, $macaddr);
 
-        // Remove the trailing $delimiter
-        $macaddr = preg_replace('/' . $delimiter . '$/', '', $macaddr);
+        /*
+         * Add back in the $delimiter delimiters without the unwanted final
+         * delimiter.
+         */
+        $macaddr = substr(chunk_split($macaddr, 2, $delimiter), 0, -1);
 
         return $macaddr;
     } /* end method format */
@@ -304,7 +309,8 @@ class Net_MAC
      * success.  A {@link Net_MAC_Exception Net_MAC_Exception}
      * Exception object will be thrown on failure in either case.
      */
-    function importVendors($file, $doReturn = false) {
+    function importVendors($file, $doReturn = false)
+    {
         if ($file == NULL) {
             throw new Net_MAC_Exception('No file or URL given', NET_MAC_ERROR_BADFILE);
         }
@@ -316,8 +322,7 @@ class Net_MAC
 
         if ($doReturn) {
             $retArr = array();
-        }
-        else {
+        } else {
             // Prepare parameters for MDB2->buildManipSQL()
             $fields = array ($this->_dbOptions['macaddrcol'],
                              $this->_dbOptions['vendorcol'],
@@ -331,11 +336,11 @@ class Net_MAC
 
         while ($line = fgets($fp, NET_MAC_LINE_MAXLENGTH)) {
             // Remove comments
-            if ( preg_match('/^\#/', $line) ) {
+            if (preg_match('/^\#/', $line)) {
                 continue;
             }
 
-            if ( preg_match('/^([0-9A-Fa-f][0-9A-Fa-f]:){2}([0-9A-Fa-f][0-9A-Fa-f]){1}/', $line) ) {
+            if (preg_match('/^([[:xdigit:]]{2}:){2}[[:xdigit:]]{2}/', $line)) {
                 $pieces = preg_split('/\s+/', $line);
 
                 // Since the file is space-delimited, we now need to
@@ -346,12 +351,11 @@ class Net_MAC
                 }
                 $desc = rtrim($desc);
 
-                if ( (isset($pieces[0])) && (isset($pieces[1])) ) {
+                if ((isset($pieces[0])) && (isset($pieces[1]))) {
                     if ($doReturn) {
                         $retArr[$pieces[0]] = array('vendor' => $pieces[1],
                                                     'description' => $desc);
-                    }
-                    else {
+                    } else {
                         $values = array($pieces[0], $pieces[1], $desc);
                         $result = $query->execute($values);
                     }
@@ -411,7 +415,7 @@ class Net_MAC
             $query = $this->_db->prepare($sql);
             $result = $query->execute();
 
-            if ( (MDB2::isError($result)) || ($result->numRows() == 0) ) {
+            if ((MDB2::isError($result)) || ($result->numRows() == 0)) {
                 return false;
             }
 
@@ -420,12 +424,10 @@ class Net_MAC
             if ($getDescription) {
                 return array($vendorcol => $macInfo[$vendorcol],
                              $desccol => $macInfo[$desccol]);
-            }
-            else {
+            } else {
                 return $macInfo[$vendorcol];
             }
-        }
-        else {
+        } else {
             return false;
         }
     } /* end method findVendor */
