@@ -1,0 +1,28 @@
+{
+    "authors": [
+        {
+            "email": "atex@php.net",
+            "name": "Andrew Teixeira",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "./"
+        ]
+    },
+    "description": "More info available on: http://pear.php.net/package/Net_MAC",
+    "license": "BSD License",
+    "name": "pear/net_mac",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Net_MAC",
+        "source": "https://github.com/pear/Net_MAC"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
