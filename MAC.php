@@ -287,7 +287,7 @@ class Net_MAC
      *
      * This method will parse a manufacturers' file, such as the one
      * from {@link
-     * http://anonsvn.wireshark.org/wireshark/trunk/manuf}, containing
+     * https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob_plain;f=manuf}, containing
      * a list of MAC address prefix-to-vendor relationships.  If the
      * $doReturn parameter is <b>false</b>, then the data will be
      * imported into the database defined by the factory of this
